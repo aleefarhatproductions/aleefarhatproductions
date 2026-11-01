@@ -193,10 +193,9 @@ const CATS=[
 ];
 // Add real client reviews here: {name:"Client Name",place:"Country",text:"Feedback"}
 const REVIEWS=[
-{name:"Khalid Hassan",place:"Dubai, UAE",text:"Alee delivered outstanding video editing work for our business. The visuals were polished, the pacing was excellent, and the final result looked premium."},
-{name:"Ibrahim Saeed",place:"Dubai, UAE",text:"Great editor with a strong creative vision. He followed our brief carefully and delivered a professional video that matched our brand identity."},
-{name:"Michael Anderson",place:"United States",text:"Working with Alee was a great experience. He turned our raw footage into engaging content with smooth transitions and professional storytelling."},
-{name:"Ryan Mitchell",place:"United States",text:"Excellent editing skills and attention to detail. The final video was exactly the style we wanted. I would gladly work with him again."}
+{name:"Haris Dogar",place:"★★★★★ Google Review",text:"Good video editing skills. Highly recommended."},
+{name:"Mehran Zour",place:"★★★★★ Google Review",text:"Best and Quick video editing service. Keep it up 👍"},
+{name:"Bright Victor",place:"★★★★★ Google Review",text:"He is super in video editing. I like his work and I recommend him to anybody or company."}
 ];
 const tabs=document.getElementById('tabs'),grid=document.getElementById('grid');
 function show(i){
@@ -223,7 +222,7 @@ CATS.forEach((c,i)=>{const b=document.createElement('button');b.className='tab';
 show(0);
 if(REVIEWS.length){
   document.getElementById('reviews').hidden=false;document.getElementById('revlink').hidden=false;
-  document.getElementById('revgrid').innerHTML=REVIEWS.map(r=>'<div class="card" style="background:var(--bg)"><div class="stars" aria-label="sample testimonial">★★★★★</div><p>“'+r.text+'”</p><b>'+r.name+'</b><small style="display:block;color:var(--mute);margin-top:4px">'+r.place+' · Sample testimonial</small></div>').join('');
+  document.getElementById('revgrid').innerHTML=REVIEWS.map(r=>'<div class="card" style="background:var(--bg)"><div class="stars" aria-label="5 stars">★★★★★</div><p>“'+r.text+'”</p><b>'+r.name+'</b></div>').join('');
 }
 </script>
 </body>
