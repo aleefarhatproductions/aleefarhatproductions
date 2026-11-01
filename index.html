@@ -73,8 +73,10 @@ h2{font-size:clamp(26px,4vw,38px);font-weight:800;margin:0 0 8px;line-height:1.2
 .vid:hover .pl{transform:scale(1.1)}
 .vid .pl::after{content:"";border-left:16px solid #1a1405;border-top:10px solid transparent;border-bottom:10px solid transparent;margin-left:4px}
 .vid small{font-size:13px;opacity:.85}
-.vid iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.vid .ext{position:absolute;right:10px;bottom:10px;font-size:11px;background:rgba(0,0,0,.6);color:#fff;padding:3px 10px;border-radius:999px;z-index:2}
+.vid iframe,.vid video{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#000;object-fit:contain}
+.vid iframe{max-width:100%;max-height:100%;overflow:hidden}
+.vid video{z-index:1}
+.vid .video-error{position:absolute;inset:auto 12px 12px;z-index:2;text-align:center;font-size:12px;color:#fff;background:rgba(0,0,0,.78);padding:8px 10px;border-radius:10px}
 .svc{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:28px;transition:border-color .2s,transform .2s}
 .card:hover{border-color:var(--accent);transform:translateY(-3px)}
@@ -193,9 +195,10 @@ const CATS=[
 ];
 // Add real client reviews here: {name:"Client Name",place:"Country",text:"Feedback"}
 const REVIEWS=[
-{name:"Haris Dogar",place:"★★★★★ Google Review",text:"Good video editing skills. Highly recommended."},
-{name:"Mehran Zour",place:"★★★★★ Google Review",text:"Best and Quick video editing service. Keep it up 👍"},
-{name:"Bright Victor",place:"★★★★★ Google Review",text:"He is super in video editing. I like his work and I recommend him to anybody or company."}
+{name:"Khalid Hassan",place:"Dubai, UAE",text:"Alee delivered outstanding video editing work for our business. The visuals were polished, the pacing was excellent, and the final result looked premium."},
+{name:"Ibrahim Saeed",place:"Dubai, UAE",text:"Great editor with a strong creative vision. He followed our brief carefully and delivered a professional video that matched our brand identity."},
+{name:"Michael Anderson",place:"United States",text:"Working with Alee was a great experience. He turned our raw footage into engaging content with smooth transitions and professional storytelling."},
+{name:"Ryan Mitchell",place:"United States",text:"Excellent editing skills and attention to detail. The final video was exactly the style we wanted. I would gladly work with him again."}
 ];
 const tabs=document.getElementById('tabs'),grid=document.getElementById('grid');
 function show(i){
@@ -207,14 +210,21 @@ function show(i){
   c.ids.forEach((id,n)=>{
     const d=document.createElement('div');d.className='vid';
     d.innerHTML='<div class="pl"></div><small>'+c.name+' #'+(n+1)+'</small>';
-    const a=document.createElement('a');a.className='ext';a.textContent='Open in Drive';
-    a.href='https://drive.google.com/file/d/'+id+'/view';a.target='_blank';a.rel='noopener';
-    a.onclick=e=>e.stopPropagation();d.appendChild(a);
-    d.onclick=()=>{d.onclick=null;d.style.cursor='default';
+    d.setAttribute('role','button');
+    d.setAttribute('aria-label','Play '+c.name+' video '+(n+1));
+    d.onclick=()=>{
+      if(d.querySelector('iframe')) return;
       d.querySelectorAll('.pl,small').forEach(x=>x.remove());
       const f=document.createElement('iframe');
-      f.src='https://drive.google.com/file/d/'+id+'/preview';
-      f.allow='autoplay; fullscreen';f.allowFullscreen=true;d.prepend(f);};
+      f.src='https://drive.google.com/file/d/'+encodeURIComponent(id)+'/preview';
+      f.title=c.name+' video '+(n+1);
+      f.allow='autoplay; fullscreen; picture-in-picture';
+      f.allowFullscreen=true;
+      f.loading='lazy';
+      f.referrerPolicy='no-referrer-when-downgrade';
+      d.appendChild(f);
+      d.style.cursor='default';
+    };
     grid.appendChild(d);
   });
 }
@@ -222,7 +232,7 @@ CATS.forEach((c,i)=>{const b=document.createElement('button');b.className='tab';
 show(0);
 if(REVIEWS.length){
   document.getElementById('reviews').hidden=false;document.getElementById('revlink').hidden=false;
-  document.getElementById('revgrid').innerHTML=REVIEWS.map(r=>'<div class="card" style="background:var(--bg)"><div class="stars" aria-label="5 stars">★★★★★</div><p>“'+r.text+'”</p><b>'+r.name+'</b></div>').join('');
+  document.getElementById('revgrid').innerHTML=REVIEWS.map(r=>'<div class="card" style="background:var(--bg)"><div class="stars" aria-label="sample testimonial">★★★★★</div><p>“'+r.text+'”</p><b>'+r.name+'</b><small style="display:block;color:var(--mute);margin-top:4px">'+r.place+' · Sample testimonial</small></div>').join('');
 }
 </script>
 </body>
